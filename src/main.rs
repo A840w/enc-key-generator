@@ -1,5 +1,5 @@
-use base64::{engine::general_purpose, Engine as BASE64, Engine};
-use clap::{Arg, Parser, ValueEnum};
+use base64::{engine::general_purpose, Engine as BASE64, };
+use clap::{Parser, ValueEnum};
 use colored::*;
 use rand::Rng;
 
@@ -75,7 +75,7 @@ fn main() {
         }
     };
     println!("{}", "\n GSRC Key Generator".bright_green().bold());
-    println!("{}", "===============================".ansi_color(244));
+    println!("{}", "============================================".ansi_color(244));
     println!(
         "{} {:?} | {} {} bytes ({} bits) | {} {:?}",
         "Algorithm:".bold().magenta(),
@@ -86,7 +86,7 @@ fn main() {
         "Format:".bold().magenta(),
         args.format
     );
-    println!("{}", "===============================".ansi_color(244));
+    println!("{}", "============================================".ansi_color(244));
 
     for i in 1..= args.count{
         let raw_bytes =  generate_randomm_bytes(byte_length);

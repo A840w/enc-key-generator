@@ -2,9 +2,9 @@
 
 > Generate cryptographically secure encryption keys for AES, ChaCha20, and custom lengths directly from your terminal.
 
-https://img.shields.io/badge/Rust-Stable-orange?style=for-the-badge&logo=rust
-https://img.shields.io/badge/CLI-Tool-blue?style=for-the-badge
-https://img.shields.io/badge/License-MIT-green?style=for-the-badge
+[![rust](https://img.shields.io/badge/Rust-Stable-orange?style=for-the-badge&logo=rust)](https://rust-lang.org/)
+![cli tool](https://img.shields.io/badge/CLI-Tool-blue?style=for-the-badge)
+[![MIT LICENCE](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](https://mit-license.org/)
 
 ---
 

@@ -1,0 +1,10 @@
+{
+  "key_type": "chacha20",
+  "byte_length": 32,
+  "bit_length": 256,
+  "format": "base64",
+  "key": [
+    "vBu+AQz80AEDpqz3LEeciM4KcOO5fiR3vmirWq9TSN4=",
+    "d8qov8sez6pc7MRRvuNqmnK+ZQ1oKuOjeIiU38Qfx+w="
+  ]
+}

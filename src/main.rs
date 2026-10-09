@@ -1,9 +1,18 @@
+use base64::display;
 use base64::{engine::general_purpose, Engine as BASE64, };
+use clap::builder::Str;
+use clap::builder::styling::AnsiColor::Yellow;
 use clap::{Parser, ValueEnum};
+use colored::Styles::Underline;
 use colored::*;
 use rand::Rng;
+use std::io::Write;
+use serde::{Serialize};
+use std::fs::File;
+use std::path::{self, PathBuf};
 
-#[derive(Copy , Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]
+#[derive(Copy , Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug, Serialize)]
+#[serde(rename_all = "lowercase")]
 enum KeyType{
     Aes128,
     Aes192,
@@ -12,7 +21,8 @@ enum KeyType{
     Custom,
 }
 
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug, Serialize)]
+#[serde(rename_all = "lowercase")]
 enum Format{
     Hex,
     Base64,
@@ -33,6 +43,18 @@ struct Args {
 
     #[arg(short = 'n' , long, default_value_t = 1)]
     count: usize,
+
+    #[arg(short, long, value_name = "FILE")]
+    save: Option<PathBuf>
+}
+
+#[derive(Serialize)]
+struct JsonRecord{
+    key_type: KeyType,
+    byte_length:usize,
+    bit_length: usize,
+    format: Format,
+    key: Vec<String>,
 }
 
 fn generate_randomm_bytes(length: usize) -> Vec<u8> {
@@ -64,6 +86,38 @@ fn get_key_length(key_type: KeyType, custom_len: Option<usize>) -> Result<usize,
     }
 }
 
+fn save_keys_to_file(
+    path: &PathBuf,
+    keys: &[String],
+    key_type: KeyType,
+    byte_length: usize,
+    format: Format
+) -> Result<(),std::io::Error> {
+    let mut file = File::create(path)?;
+
+    let is_json =  path
+        .extension()
+        .map_or(false,|ext| ext.eq_ignore_ascii_case("json"));
+        //.unwrap_or(false);
+
+    if is_json {
+        let record = JsonRecord{
+            key_type,
+            byte_length,
+            bit_length: byte_length * 8,
+            format,
+            key: keys.to_vec(),
+        };
+        let json_content =  serde_json::to_string_pretty(&record)?;
+        file.write_all(json_content.as_bytes())?;
+    } else {
+        for key in keys {
+            writeln!(file, "{}", key)?;
+        }
+    }
+    Ok(())
+}
+
 fn main() {
     let args = Args::parse();
 
@@ -87,7 +141,7 @@ fn main() {
         args.format
     );
     println!("{}", "============================================".ansi_color(244));
-
+    let mut generated_keys = Vec::with_capacity(args.count);
     for i in 1..= args.count{
         let raw_bytes =  generate_randomm_bytes(byte_length);
         let formatted_key = format_key(&raw_bytes, args.format);
@@ -96,6 +150,26 @@ fn main() {
             print!("{}", format!("[{:02}]", i ).dimmed());
         }
         println!(" {}", formatted_key.bright_green().bold());
+        generated_keys.push(formatted_key);
+    }
+if let Some(ref path) = args.save {
+        match save_keys_to_file(&path, &generated_keys, args.key_type, byte_length, args.format) {
+            Ok(_) => {
+                println!(
+                    "\n{} Saved output to {}",
+                    "✔".bright_green().bold(),
+                    path.display().to_string().underline().yellow()
+                );
+            }
+            Err(e) => {
+                eprintln!(
+                    "\n{} Failed to save file: {}",
+                    "✖".bright_red().bold(),
+                    e.to_string().red()
+                );
+                std::process::exit(1);
+            }
+        }
     }
     println!()
 }

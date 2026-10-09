@@ -4,4 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-clap = "4.6.7"
+base64 = "0.23.1"
+clap = { version = "4.6.7", features = ["derive"] }
+colored = "3.1.1"
+hex = "0.4.3"
+rand = "0.10.3"

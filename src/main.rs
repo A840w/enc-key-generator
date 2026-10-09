@@ -77,14 +77,25 @@ fn main() {
     println!("{}", "\n GSRC Key Generator".bright_green().bold());
     println!("{}", "===============================".ansi_color(244));
     println!(
-        "{} {:?} | bytes ({} bits | {} {:?}",
+        "{} {:?} | {} {} bytes ({} bits) | {} {:?}",
         "Algorithm:".bold().magenta(),
         args.key_type,
-        "length:".bold().magenta(),
+        "Length:".bold().magenta(),
         byte_length,
         byte_length * 8,
         "Format:".bold().magenta(),
         args.format
     );
+    println!("{}", "===============================".ansi_color(244));
 
+    for i in 1..= args.count{
+        let raw_bytes =  generate_randomm_bytes(byte_length);
+        let formatted_key = format_key(&raw_bytes, args.format);
+
+        if args.count  > 1 {
+            print!("{}", format!("[{:02}]", i ).dimmed());
+        }
+        println!(" {}", formatted_key.bright_green().bold());
+    }
+    println!()
 }

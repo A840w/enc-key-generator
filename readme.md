@@ -42,8 +42,8 @@
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/your-repo.git
-cd your-repo
+git clone https://github.com/A840w/enc-key-generator.git
+cd enc-key-generator
 ```
 
 ## 2. Run the Tool

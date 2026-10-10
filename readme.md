@@ -35,6 +35,9 @@
 ✅ **Colorized Terminal Output**
 - Styled output powered by `colored`.
 
+✅ **to file  Output**
+- now you can save otuput to files leveraging power of `serde`.
+
 ---
 
 #  Quick Start
@@ -84,7 +87,7 @@ Choose what you want:
 ### Formula
 
 ```bash
-cargo run -- -k <key-type> -f <format> -n <count>
+cargo run -- -k <key-type> -f <format> -n <count> --save <file>
 ```
 
 ---
@@ -173,6 +176,18 @@ cargo run -- -k custom -l 64 -f hex
 ```bash
 cargo run -- -k custom -l 128 -f base64 -n 10
 ```
+##  save to .txt file
+
+```bash
+cargo run -- -k aes256 -n 3 --save mykey.txt
+```
+
+##  save to .json file
+
+```bash
+cargo run -- -k aes256 -n 3 --save keys.json
+```
+
 
 ---
 
@@ -184,6 +199,7 @@ cargo run -- -k custom -l 128 -f base64 -n 10
 | `-f` | Output format |
 | `-n` | Number of keys to generate |
 | `-l` | Custom key length (required for custom mode) |
+| `--save` | save to file |
 
 ---
 
